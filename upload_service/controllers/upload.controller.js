@@ -2,25 +2,24 @@ import AWS from "aws-sdk";
 import fs from "fs";
 
 const uploadFileToS3 = async (req, res) => {
-  const filePath = `C:/WORK/HHLD_Handson/hhld-youtube/upload_service/assets/about2.jpg`;
-
-  // Check if the file exists
-  if (!fs.existsSync(filePath)) {
-    console.log("File does not exist: ", filePath);
-    return;
+  if (!req.file) {
+    console.log("No file received");
+    return res.status(400).send("No file received");
   }
+
+  const file = req.file;
+
+  const params = {
+    Bucket: process.env.AWS_BUCKET,
+    Key: file.originalname,
+    Body: file.buffer,
+  };
 
   AWS.config.update({
     region: "us-east-2",
     accessKeyId: process.env.AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   });
-
-  const params = {
-    Bucket: process.env.AWS_BUCKET,
-    Key: "dsa.png",
-    Body: fs.createReadStream(filePath), // The file stream to be uploaded to S3
-  };
 
   const s3 = new AWS.S3();
 
