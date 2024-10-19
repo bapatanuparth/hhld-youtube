@@ -1,8 +1,7 @@
 import express from "express";
-import uploadRouter from "./routes/upload.route.js";
 import cors from "cors";
 import dotenv from "dotenv";
-import kafkaPublisherRouter from "./routes/kafkapublisher.route.js";
+import KafkaConfig from "../upload_service/kafka/kafka.js";
 
 dotenv.config();
 const port = process.env.PORT || 8081;
@@ -15,13 +14,16 @@ app.use(
   })
 );
 app.use(express.json());
-app.use("/upload", uploadRouter);
-app.use("/publish", kafkaPublisherRouter);
 
 app.get("/", (req, res) => {
-  res.send("HHLD Youtube");
+  res.send("HHLD Youtube transcoder");
+});
+
+const kafkaconfig = new KafkaConfig();
+kafkaconfig.consume("transcode", (value) => {
+  console.log("got new data from kafka:", value);
 });
 
 app.listen(port, () => {
-  console.log(`Server is listening at http://localhost:${port}`);
+  console.log(`Transcoder Server is listening at http://localhost:${port}`);
 });
