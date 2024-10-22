@@ -30,6 +30,7 @@ const UploadForm = () => {
       const totalChunks = Math.ceil(selectedFile.size / chunkSize);
 
       let start = 0;
+      const uploadPromises = [];
       //create chunks of given chunkSize of the entire file
       for (let chunkIndex = 0; chunkIndex < totalChunks; chunkIndex++) {
         const chunk = selectedFile.slice(start, start + chunkSize);
@@ -41,13 +42,20 @@ const UploadForm = () => {
         chunkFormData.append("chunkIndex", chunkIndex);
         chunkFormData.append("uploadId", uploadId);
 
-        await axios.post("http://localhost:8081/upload", chunkFormData, {
-          //call the second step of the multipart upload, with each chunk
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        const uploadPromise = axios.post(
+          "http://localhost:8081/upload",
+          chunkFormData,
+          {
+            //call the second step of the multipart upload, with each chunk
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        );
+        uploadPromises.push(uploadPromise);
       }
+
+      await Promise.all(uploadPromises);
       //complete the multi-part upload
       const completeRes = await axios.post(
         "http://localhost:8081/upload/complete",
