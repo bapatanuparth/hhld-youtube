@@ -69,7 +69,8 @@ export const uploadChunk = async (req, res) => {
 export const completeUpload = async (req, res) => {
   try {
     console.log("Completing Upload");
-    const { filename, totalChunks, uploadId } = req.body; //you need total chunks and uploadID
+    const { filename, totalChunks, uploadId, title, description, author } =
+      req.body; //you need total chunks and uploadID
     const uploadedParts = [];
 
     // Build uploadedParts array from request body
@@ -104,16 +105,17 @@ export const completeUpload = async (req, res) => {
 
     // Completing multipart upload using promise
     const uploadResult = await s3
-      .completeMultipartUpload(completeParams) //call the last step
+      .completeMultipartUpload(completeParams)
       .promise();
 
     console.log("data----- ", uploadResult);
-    await addVideoDetailsToDB(
-      "hardcoded title",
-      "hardcoded title",
-      "hardcoded title",
-      "hardcoded title"
-    );
+
+    console.log("Updating data in DB");
+
+    const url = uploadResult.Location;
+    console.log("Video uploaded at ", url);
+
+    await addVideoDetailsToDB(title, description, author, url);
     return res.status(200).json({ message: "Uploaded successfully!!!" });
   } catch (error) {
     console.log("Error completing upload :", error);
