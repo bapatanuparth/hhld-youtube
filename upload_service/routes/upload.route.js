@@ -4,6 +4,7 @@ import {
   initializeUpload,
   uploadChunk,
   completeUpload,
+  uploadToDb,
 } from "../controllers/multipartupload.controller.js";
 const upload = multer();
 
@@ -18,5 +19,7 @@ router.post("/", upload.single("chunk"), uploadChunk);
 
 // Route for completing the upload
 router.post("/complete", completeUpload);
+
+router.post("/uploadToDB", uploadToDb);
 
 export default router;
