@@ -108,6 +108,12 @@ export const completeUpload = async (req, res) => {
       .promise();
 
     console.log("data----- ", uploadResult);
+    await addVideoDetailsToDB(
+      "hardcoded title",
+      "hardcoded title",
+      "hardcoded title",
+      "hardcoded title"
+    );
     return res.status(200).json({ message: "Uploaded successfully!!!" });
   } catch (error) {
     console.log("Error completing upload :", error);
