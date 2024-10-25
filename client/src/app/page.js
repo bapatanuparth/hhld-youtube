@@ -1,10 +1,10 @@
-import Room from "./pages/Room";
 import Auth from "./pages/Auth";
+import YoutubeHome from "./pages/YoutubeHome";
 
 export default function Home() {
   return (
     <div>
-      <Room></Room>
+      <YoutubeHome></YoutubeHome>
     </div>
   );
 }

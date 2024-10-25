@@ -1,12 +1,23 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useSession } from "next-auth/react";
+import { redirect } from "next/navigation";
 
 const UploadForm = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [author, setAuthor] = useState("");
+
+  const { data } = useSession();
+  useEffect(() => {
+    console.log("data------- ", data);
+    if (!data) {
+      console.log("redirecting");
+      redirect("/");
+    }
+  }, []);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
