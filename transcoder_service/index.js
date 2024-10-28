@@ -25,10 +25,10 @@ app.get("/transcode", (req, res) => {
   res.send("transcoded");
 });
 
-// const kafkaconfig = new KafkaConfig();
-// kafkaconfig.consume("transcode", (value) => {
-//   console.log("got new data from kafka:", value);
-// });
+const kafkaconfig = new KafkaConfig();
+kafkaconfig.consume("transcode", (value) => {
+  console.log("got new data from kafka:", value);
+});
 
 app.listen(port, () => {
   console.log(`Transcoder Server is listening at http://localhost:${port}`);
