@@ -27,6 +27,8 @@ app.get("/transcode", (req, res) => {
 
 const kafkaconfig = new KafkaConfig();
 kafkaconfig.consume("transcode", (value) => {
+  //call S3ToS3 here to pass the URL
+  //consume the URL there
   console.log("got new data from kafka:", value);
 });
 
