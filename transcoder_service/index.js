@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import KafkaConfig from "../upload_service/kafka/kafka.js";
 import convertToHLS from "./hls/transcode.js";
+import s3ToS3 from "./hls/s3Tos3.js";
 
 dotenv.config();
 const port = process.env.PORT || 8081;
@@ -27,8 +28,10 @@ app.get("/transcode", (req, res) => {
 
 const kafkaconfig = new KafkaConfig();
 kafkaconfig.consume("transcode", (value) => {
-  //call S3ToS3 here to pass the URL
-  //consume the URL there
+  console.log("This is the value", value);
+  const message = JSON.parse(value);
+  const fileName = message.url.split("/").pop();
+  s3ToS3(fileName);
   console.log("got new data from kafka:", value);
 });
 

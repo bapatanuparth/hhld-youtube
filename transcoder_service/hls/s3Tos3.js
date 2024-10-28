@@ -19,12 +19,12 @@ const s3 = new AWS.S3({
 
 // Define constants
 //take this name from from the calling function after Kafka message is consumed with the URL
-const mp4FileName = "trial1.mp4"; // Name of the original MP4 file on S3
+// const mp4FileName = "trial1.mp4"; // Name of the original MP4 file on S3
 const bucketName = process.env.AWS_BUCKET; // S3 bucket name from environment
 const hlsFolder = "hls"; // Folder where HLS files will be stored
 
 // Function to handle the entire process from S3 download to HLS conversion and re-upload
-const s3ToS3 = async () => {
+const s3ToS3 = async (mp4FileName) => {
   console.log("Starting script");
   console.time("req_time"); // Start a timer for tracking script execution time
 

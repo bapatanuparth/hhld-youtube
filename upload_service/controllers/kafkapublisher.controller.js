@@ -38,7 +38,6 @@ export const pushVideoForEncodingToKafka = async (title, url) => {
     ];
     const result = await kafkaconfig.produce("transcode", msgs);
     console.log("result of produce : ", result);
-    res.status(200).json("message uploaded successfully");
   } catch (error) {
     console.log(error);
   }
