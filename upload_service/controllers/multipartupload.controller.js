@@ -1,6 +1,7 @@
 import AWS from "aws-sdk";
 import { addVideoDetailsToDB } from "../db/db.js";
 import { pushVideoForEncodingToKafka } from "./kafkapublisher.controller.js";
+import PushToOpenSearch from "../opensearch/pushToOpensearch.js";
 
 // Initialize upload
 export const initializeUpload = async (req, res) => {
@@ -117,7 +118,10 @@ export const completeUpload = async (req, res) => {
     console.log("Video uploaded at ", url);
 
     await addVideoDetailsToDB(title, description, author, url);
+    //push to Kafka for transcoding ands saving different formats to S3
     pushVideoForEncodingToKafka(title, url);
+    //save the video with different formats with metadata to opensearch
+    PushToOpenSearch(title, description, author, uploadResult.Location);
     return res.status(200).json({ message: "Uploaded successfully!!!" });
   } catch (error) {
     console.log("Error completing upload :", error);
