@@ -1,6 +1,7 @@
 import React from "react";
 import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import SearchBar from "./SearchBar";
 
 const NavBar = () => {
   const router = useRouter();
@@ -17,6 +18,7 @@ const NavBar = () => {
           <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">
             Educosys YouTube
           </span>
+          <SearchBar></SearchBar>
           <div className="hidden w-full md:block md:w-auto" id="navbar-default">
             {data ? (
               <div className="flex">
